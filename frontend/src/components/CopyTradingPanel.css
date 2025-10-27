@@ -1,0 +1,237 @@
+.copy-trading-panel {
+  background: var(--bg-secondary);
+  border-left: 1px solid var(--border);
+  width: 380px;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+.panel-header {
+  padding: 20px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: var(--bg-secondary);
+  z-index: 10;
+}
+
+.panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.status-indicator {
+  font-size: 11px;
+  padding: 4px 8px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.status-indicator.active {
+  background: rgba(255, 193, 7, 0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.trade-status {
+  margin: 8px 12px;
+  padding: 10px;
+  font-size: 12px;
+  border: 1px solid;
+  animation: fadeIn 0.3s ease;
+}
+
+.trade-status.success {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: #00ff88;
+  color: #00ff88;
+}
+
+.trade-status.error {
+  background: rgba(255, 68, 68, 0.1);
+  border-color: #ff4444;
+  color: #ff4444;
+}
+
+.control-group {
+  padding: 20px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.control-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.control-label input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.wallet-selector {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.wallet-option {
+  padding: 8px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.wallet-option:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.wallet-option.selected {
+  background: rgba(255, 193, 7, 0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.wallet-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+  margin-right: 8px;
+}
+
+.slider-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider-group input[type="range"] {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-tertiary);
+  outline: none;
+  border: 1px solid var(--border);
+}
+
+.slider-group input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg-primary);
+}
+
+.slider-group input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  background: var(--accent);
+  cursor: pointer;
+  border: 2px solid var(--bg-primary);
+}
+
+.slider-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 60px;
+  text-align: right;
+}
+
+.emergency-section {
+  margin-top: auto;
+  background: rgba(255, 68, 68, 0.05);
+  border-top: 2px solid #ff4444;
+  border-bottom: none;
+}
+
+.emergency-stop-btn {
+  width: 100%;
+  padding: 12px;
+  background: #ff4444;
+  border: none;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.emergency-stop-btn:hover:not(:disabled) {
+  background: #ff0000;
+  box-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+}
+
+.emergency-stop-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.emergency-note {
+  margin: 8px 0 0;
+  font-size: 10px;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .copy-trading-panel {
+    display: none;
+  }
+}
+

@@ -1,0 +1,116 @@
+.wallet-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.wallet-card.flashing {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  border-color: var(--accent);
+}
+
+.wallet-header {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.wallet-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.no-position {
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: 14px;
+  padding: 16px 0;
+}
+
+.positions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.position {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.position-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.coin {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.direction {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.direction.long {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.direction.short {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.leverage {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.position-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.value {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.pnl.positive {
+  color: var(--success);
+}
+
+.pnl.negative {
+  color: var(--danger);
+}
