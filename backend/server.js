@@ -165,10 +165,11 @@ async function executeCopyTrade(sourceWallet, action, tradeDetails) {
     // Execute the trade
     if (action === 'open') {
       // Open new position
+      // Note: sz is position size in USD notional value
       const result = await walletClient.placeOrder({
         coin,
         is_buy: isLong,
-        sz: positionSize,
+        sz: positionSize, // USD notional size
         limit_px: null, // Market order
         order_type: { limit: { tif: 'Ioc' } },
         reduce_only: false,
@@ -185,26 +186,47 @@ async function executeCopyTrade(sourceWallet, action, tradeDetails) {
       });
       
     } else if (action === 'close' && copyTradingConfig.copyCloses) {
-      // Close position
+      // Close position - find matching position by coin AND direction
       const myPosition = myPositions.find(p => p.coin === coin);
       if (myPosition) {
-        const result = await walletClient.placeOrder({
-          coin,
-          is_buy: !isLong, // Close is opposite direction
-          sz: Math.abs(parseFloat(myPosition.szi)),
-          limit_px: null,
-          order_type: { limit: { tif: 'Ioc' } },
-          reduce_only: true,
-          vaultAddress: process.env.MAIN_WALLET_ADDRESS // Trade on behalf of main wallet
-        });
+        const myPositionIsLong = parseFloat(myPosition.szi) > 0;
         
-        console.log(`[${getTimestamp()}] Copy trade executed: Closed ${coin} position`);
+        // Verify position direction matches what we're trying to close
+        if (myPositionIsLong === isLong) {
+          const result = await walletClient.placeOrder({
+            coin,
+            is_buy: !isLong, // Close is opposite direction
+            sz: Math.abs(parseFloat(myPosition.szi)),
+            limit_px: null,
+            order_type: { limit: { tif: 'Ioc' } },
+            reduce_only: true,
+            vaultAddress: process.env.MAIN_WALLET_ADDRESS // Trade on behalf of main wallet
+          });
+          
+          console.log(`[${getTimestamp()}] Copy trade executed: Closed ${coin} ${isLong ? 'LONG' : 'SHORT'} position`);
+          io.emit('copyTradeStatus', {
+            success: true,
+            message: `Closed ${coin} ${isLong ? 'LONG' : 'SHORT'} position`,
+            sourceWallet,
+            action,
+            result
+          });
+        } else {
+          console.log(`[${getTimestamp()}] Copy trade skipped: Position direction mismatch (source: ${isLong ? 'LONG' : 'SHORT'}, mine: ${myPositionIsLong ? 'LONG' : 'SHORT'})`);
+          io.emit('copyTradeStatus', {
+            success: false,
+            message: `Cannot close ${coin}: Direction mismatch`,
+            sourceWallet,
+            action
+          });
+        }
+      } else {
+        console.log(`[${getTimestamp()}] Copy trade skipped: No position found for ${coin}`);
         io.emit('copyTradeStatus', {
-          success: true,
-          message: `Closed ${coin} position`,
+          success: false,
+          message: `No ${coin} position to close`,
           sourceWallet,
-          action,
-          result
+          action
         });
       }
     }
