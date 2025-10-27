@@ -21,10 +21,13 @@ const CopyTradingPanel = ({ socket, isConnected }) => {
   useEffect(() => {
     if (!socket) return;
 
-    // Listen for config updates from server
-    socket.on('copyTradingConfig', (serverConfig) => {
+    // Listen for config updates from server (immediately update state)
+    const handleConfigUpdate = (serverConfig) => {
+      console.log('Received copy trading config from server:', serverConfig);
       setConfig(serverConfig);
-    });
+    };
+    
+    socket.on('copyTradingConfig', handleConfigUpdate);
 
     // Listen for copy trade status updates
     socket.on('copyTradeStatus', (status) => {
@@ -35,7 +38,7 @@ const CopyTradingPanel = ({ socket, isConnected }) => {
     });
 
     return () => {
-      socket.off('copyTradingConfig');
+      socket.off('copyTradingConfig', handleConfigUpdate);
       socket.off('copyTradeStatus');
     };
   }, [socket]);
