@@ -576,6 +576,9 @@ io.on('connection', (socket) => {
   // Send trade history
   socket.emit('tradeHistory', tradeHistory);
   
+  // Send current copy trading configuration
+  socket.emit('copyTradingConfig', copyTradingConfig);
+  
   // Send current positions for all wallets (without creating notifications)
   Object.keys(lastPositions).forEach(walletName => {
     socket.emit('positionUpdate', {
