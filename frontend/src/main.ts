@@ -4,7 +4,7 @@ import { TRACKED_WALLETS } from './lib/types';
 import { renderWalletList } from './components/walletList';
 import { renderPositions } from './components/positions';
 
-const BACKEND_URL = 'http://localhost:3001';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://hypertracker-backend.onrender.com';
 
 class HyperTrackerApp {
   private ws: WebSocketClient;
