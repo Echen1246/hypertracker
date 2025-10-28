@@ -5,6 +5,7 @@ import { renderWalletList } from './components/walletList';
 import { renderPositions } from './components/positions';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://hypertracker-backend.onrender.com';
+console.log('🔗 Connecting to backend:', BACKEND_URL);
 
 class HyperTrackerApp {
   private ws: WebSocketClient;
