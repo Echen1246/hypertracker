@@ -1,29 +1,32 @@
 # HyperTracker - AI Agent Wallet Tracker
 
-Real-time monitoring dashboard for 6 AI trading agent wallets on Hyperliquid exchange.
+Real-time monitoring dashboard for 7 AI trading agent wallets on Hyperliquid exchange with copy trading capabilities.
 
 ## Project Overview
 
 HyperTracker monitors the following AI-named trading wallets in real-time:
+- **MY WALLET**: 0x520bb9E1Fe0DaCF4368992c3Ef8764284a69076B
 - **GPT**: 0x67293D914eAFb26878534571add81F6Bd2D9fE06
 - **Gemini**: 0x1b7A7D099a670256207a30dD0AE13D35f278010f
 - **Claude**: 0x59fA085d106541A834017b97060bcBBb0aa82869
 - **Grok**: 0x56D652e62998251b56C8398FB11fcFe464c08F84
 - **Deepseek**: 0xC20aC4Dc4188660cBF555448AF52694CA62b0734
-- **Qwen**: 0xC20aC4Dc4188660cBF555448AF52694CA62b0734
+- **Qwen**: 0x7a8fd8bba33e37361ca6b0cb4518a44681bad2f3
 
 ## Architecture
 
 - **Backend**: Node.js + Express + Socket.io + WebSocket
   - Single WebSocket connection to Hyperliquid API
   - Broadcasts position updates to all frontend clients
+  - Copy trading execution engine
   - Automatic reconnection with exponential backoff
   
-- **Frontend**: React + Socket.io Client + Vite
-  - Real-time position display
-  - Audio notifications on position changes
-  - Visual flash animations
-  - Minimalist dark theme design
+- **Frontend**: Vanilla TypeScript + Vite
+  - Zero framework overhead for maximum performance
+  - Real-time position display with live P&L
+  - Clean, minimalist UI inspired by Hyperliquid
+  - Table-based layout with data density
+  - Copy trading configuration panel
 
 ## Local Development
 
@@ -39,7 +42,7 @@ npm install
 npm start
 ```
 
-Backend will run on `http://localhost:3001`
+Backend will run on `http://localhost:3000`
 
 ### Frontend Setup
 
@@ -51,29 +54,35 @@ npm run dev
 
 Frontend will run on `http://localhost:5173`
 
-The frontend will automatically connect to the backend at `http://localhost:3001`.
+The frontend will automatically connect to the backend at `ws://localhost:3000`.
 
 ## Features
 
 ### Real-Time Position Tracking
 - Coin symbol (BTC, ETH, etc.)
-- Position direction (LONG/SHORT)
-- Leverage (e.g., 15x)
+- Position direction (LONG/SHORT with color coding)
+- Leverage display (e.g., 15x)
 - Entry price
-- Position size
-- Unrealized P&L
+- Position value and margin used
+- Unrealized P&L with percentage
+
+### Copy Trading
+- Select a wallet to copy trades from
+- Configurable position sizing (percentage of account)
+- Real-time trade mirroring
+- Emergency stop functionality
 
 ### User Experience
-- **Audio Notification**: Plays beep when positions update
-- **Visual Feedback**: 200ms cyan flash on updated wallet cards
-- **Connection Status**: Green/red indicator in top-right corner
-- **Responsive Design**: Works on desktop and mobile
+- **Clean UI**: Minimalist black background, no boxes or cards, table-first design
+- **Connection Status**: Live/Offline indicator in header
+- **Data Density**: Compact layout optimized for viewing many positions
+- **Responsive Design**: Optimized for desktop with clean table layout
+- **Zero Framework Overhead**: Pure TypeScript for maximum performance
 
 ### Backend Features
 - **Single WebSocket Connection**: Efficient connection management to Hyperliquid
 - **Exponential Backoff Reconnection**: 1s → 2s → 4s → 8s → 16s → 30s max
-- **Heartbeat Mechanism**: Detects stale connections
-- **Console Logging**: Timestamps + wallet name + action
+- **Copy Trading Engine**: Detects and mirrors trades automatically
 - **Multi-Client Broadcasting**: Socket.io broadcasts to all connected frontends
 
 ## Deployment
@@ -120,20 +129,26 @@ The frontend will automatically connect to the backend at `http://localhost:3001
 ```
 hypertracker/
 ├── backend/
-│   ├── server.js          # Express + Socket.io + Hyperliquid WS
+│   ├── server.js               # Express + Socket.io + Hyperliquid WS + Copy Trading
+│   ├── test-copy-trade.js      # Copy trading test script
 │   ├── package.json
-│   └── .env              # PORT=3001
+│   └── .env                    # Optional config
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx       # Main component
-│   │   ├── App.css       # Main styles
+│   │   ├── main.ts             # App initialization
+│   │   ├── lib/
+│   │   │   ├── websocket.ts    # WebSocket client
+│   │   │   └── types.ts        # TypeScript interfaces
 │   │   ├── components/
-│   │   │   ├── WalletCard.jsx    # Wallet card component
-│   │   │   └── WalletCard.css    # Card styles
-│   │   ├── index.css     # Global styles
-│   │   └── main.jsx      # Entry point
+│   │   │   ├── walletList.ts   # Wallet sidebar rendering
+│   │   │   └── positions.ts    # Position cards rendering
+│   │   └── styles/
+│   │       └── main.css        # All styles (CSS3 with gradients)
+│   ├── index.html              # Main HTML
 │   ├── package.json
-│   └── .env              # VITE_BACKEND_URL
+│   ├── tsconfig.json           # TypeScript config
+│   ├── vite.config.ts          # Vite build config
+│   └── .env.example            # VITE_BACKEND_URL
 └── README.md
 ```
 
@@ -192,15 +207,19 @@ hypertracker/
 
 ## Design System
 
-- **Background**: `#0a0a0f`
-- **Accent**: `#00d4ff` (light cyan)
-- **Success/Long**: `#00ff88` (green)
-- **Error/Short**: `#ff4444` (red)
-- **Text Primary**: `#ffffff`
-- **Text Secondary**: `#808080`
-- **Text Muted**: `#505050`
-- **Border**: `#1a1a1f`
-- **Font**: Inter, SF Pro Display (weight 300-400)
+Inspired by Hyperliquid's clean, professional interface.
+
+- **Background**: `#000000` (pure black)
+- **Surface**: `#0a0a0a` (subtle elevation)
+- **Success/Long**: `#00ff00` (bright green)
+- **Error/Short**: `#ff4466` (red)
+- **Primary**: `#00ffff` (cyan)
+- **Text Primary**: `#ffffff` (white)
+- **Text Muted**: `#666666` (gray)
+- **Border**: `#1a1a1a` (minimal)
+- **Font**: Inter (11-14px, weights 400-600)
+- **Layout**: Table-based, no cards, minimal borders
+- **Philosophy**: Data density, clean lines, no fluff
 
 ## Troubleshooting
 

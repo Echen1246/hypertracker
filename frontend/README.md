@@ -1,16 +1,55 @@
-# React + Vite
+# HyperTracker Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, professional vanilla TypeScript frontend for tracking Hyperliquid positions and copy trading.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Pure TypeScript** - No React, no frameworks
+- **Vite** - Fast build tool and dev server
+- **Custom WebSocket Client** - Real-time position updates
+- **CSS3** - Modern, responsive design with gradients and animations
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 📊 Real-time position tracking for multiple wallets
+- 💰 Live P&L calculations
+- 🔄 Copy trading configuration
+- 🎨 Professional dark theme with gradient accents
+- ⚡ Zero-latency DOM updates
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Architecture
+
+```
+src/
+├── main.ts              # App initialization
+├── styles/
+│   └── main.css        # All styles
+├── lib/
+│   ├── websocket.ts    # WebSocket client
+│   └── types.ts        # TypeScript interfaces
+└── components/
+    ├── walletList.ts   # Wallet sidebar
+    └── positions.ts    # Position cards
+```
+
+## Backend Connection
+
+The frontend connects to the Node.js backend via WebSocket on `ws://localhost:3000`.
+
+Make sure the backend is running before starting the frontend.
