@@ -33,7 +33,10 @@
       <section class="content-area">
         <div class="wallet-detail-container">
           <div class="wallet-detail-header">
-            <h2 id="selected-wallet-name">Select a wallet</h2>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <h2 id="selected-wallet-name">Select a wallet</h2>
+              <button class="btn-log" id="show-log-btn">View Log</button>
+            </div>
             <div class="pnl-badge" id="total-pnl-badge"></div>
           </div>
           <div class="positions-grid" id="positions-grid">
@@ -73,6 +76,19 @@
         </div>
       </section>
     </main>
+
+    <!-- Trade Log Modal -->
+    <div class="modal-overlay hidden" id="trade-log-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modal-wallet-name">Trade Log</h3>
+          <button class="modal-close" id="close-modal-btn">&times;</button>
+        </div>
+        <div class="modal-body" id="trade-log-body">
+          <div class="trade-log-empty">No trade history available</div>
+        </div>
+      </div>
+    </div>
   </div>
   
   <script type="module" src="/src/main.ts"></script>

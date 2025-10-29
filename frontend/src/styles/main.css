@@ -461,6 +461,172 @@ input:checked + .toggle-slider:before {
   background: var(--color-bg-secondary);
 }
 
+/* Trade Log Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.modal-close:hover {
+  color: var(--color-text);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.trade-log-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.trade-log-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.trade-log-item:last-child {
+  border-bottom: none;
+}
+
+.trade-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.trade-log-action {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+}
+
+.trade-log-action.opened {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--color-success);
+}
+
+.trade-log-action.closed {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+}
+
+.trade-log-action.modified {
+  background: rgba(0, 255, 255, 0.15);
+  color: var(--color-primary);
+}
+
+.trade-log-time {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.trade-log-details {
+  font-size: 12px;
+  color: var(--color-text);
+}
+
+.trade-log-coin {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.trade-log-direction {
+  font-size: 11px;
+  font-weight: 500;
+  margin-right: 0.5rem;
+}
+
+.trade-log-direction.long {
+  color: var(--color-success);
+}
+
+.trade-log-direction.short {
+  color: var(--color-danger);
+}
+
+.btn-log {
+  padding: 0.25rem 0.75rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  color: var(--color-text);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-log:hover {
+  border-color: var(--color-border-hover);
+  background: var(--color-border);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .main-content {
@@ -484,6 +650,11 @@ input:checked + .toggle-slider:before {
   
   .position-label {
     display: inline;
+  }
+  
+  .modal-content {
+    width: 95%;
+    max-height: 90vh;
   }
 }
 

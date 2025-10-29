@@ -4,12 +4,13 @@ import { TRACKED_WALLETS } from './lib/types';
 import { renderWalletList } from './components/walletList';
 import { renderPositions } from './components/positions';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://hypertracker-backend.onrender.com';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://hypertracker.onrender.com';
 console.log('🔗 Connecting to backend:', BACKEND_URL);
 
 class HyperTrackerApp {
   private ws: WebSocketClient;
   private walletsData: Map<string, any[]> = new Map();
+  private tradeHistory: any[] = [];
   private selectedWallet: string = 'MY WALLET';
   private copyTradingEnabled: boolean = false;
 
@@ -44,6 +45,20 @@ class HyperTrackerApp {
       this.copyTradingEnabled = data.enabled;
       this.updateCopyTradingUI(data);
     });
+
+    this.ws.on('tradeHistory', (history: any[]) => {
+      console.log('Trade history received:', history);
+      this.tradeHistory = history || [];
+    });
+
+    this.ws.on('newTrade', (trade: any) => {
+      console.log('New trade:', trade);
+      this.tradeHistory.unshift(trade);
+      // Keep last 100
+      if (this.tradeHistory.length > 100) {
+        this.tradeHistory.pop();
+      }
+    });
   }
 
   private setupUI() {
@@ -71,6 +86,25 @@ class HyperTrackerApp {
         select.appendChild(option);
       });
     }
+
+    // Trade log modal
+    const showLogBtn = document.getElementById('show-log-btn');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const modal = document.getElementById('trade-log-modal');
+
+    showLogBtn?.addEventListener('click', () => {
+      this.showTradeLog();
+    });
+
+    closeModalBtn?.addEventListener('click', () => {
+      modal?.classList.add('hidden');
+    });
+
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('hidden');
+      }
+    });
   }
 
   private updateStatus(connected: boolean) {
@@ -155,6 +189,48 @@ class HyperTrackerApp {
     // Send directly to socket, not through WebSocketClient wrapper
     (this.ws as any).socket.emit('updateCopyConfig', config);
     console.log('Saved copy trading config:', config);
+  }
+
+  private showTradeLog() {
+    const modal = document.getElementById('trade-log-modal');
+    const modalWalletName = document.getElementById('modal-wallet-name');
+    const tradeLogBody = document.getElementById('trade-log-body');
+
+    if (!modal || !tradeLogBody) return;
+
+    // Update modal title
+    if (modalWalletName) {
+      modalWalletName.textContent = `${this.selectedWallet} - Trade Log`;
+    }
+
+    // Filter trades for selected wallet
+    const walletTrades = this.tradeHistory.filter(trade => trade.wallet === this.selectedWallet);
+
+    if (walletTrades.length === 0) {
+      tradeLogBody.innerHTML = '<div class="trade-log-empty">No trades found for this wallet</div>';
+    } else {
+      tradeLogBody.innerHTML = walletTrades.map(trade => {
+        const date = new Date(trade.timestamp);
+        const timeStr = date.toLocaleString();
+        const actionClass = trade.action || 'modified';
+        
+        return `
+          <div class="trade-log-item">
+            <div class="trade-log-header">
+              <span class="trade-log-action ${actionClass}">${trade.action || 'unknown'}</span>
+              <span class="trade-log-time">${timeStr}</span>
+            </div>
+            <div class="trade-log-details">
+              <span class="trade-log-coin">${trade.coin}</span>
+              ${trade.direction ? `<span class="trade-log-direction ${trade.direction.toLowerCase()}">${trade.direction}</span>` : ''}
+              ${trade.details ? `<span>${trade.details}</span>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    modal.classList.remove('hidden');
   }
 }
 
